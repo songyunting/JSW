@@ -6,8 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- 获取设备当前位置的权限 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 获取设备当前位置的权限 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -19,13 +18,17 @@
         android:roundIcon="@mipmap/ic_jsw_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".web.NewDetailsWeb"></activity>
+        <activity android:name=".activity.NewListActivity" />
+        <activity android:name=".activity.NewTopActivity" />
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="iaCMB4b21YvT6H0qZrd18UjllDp7IOyv" >
-        </meta-data>
+            android:value="iaCMB4b21YvT6H0qZrd18UjllDp7IOyv" />
 
-        <activity android:name=".activity.WeatherActivity" android:theme="@style/DefaultCityPickerTheme"/>
+        <activity
+            android:name=".activity.WeatherActivity"
+            android:theme="@style/DefaultCityPickerTheme" />
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +37,10 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote"/>
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" />
     </application>
 
 </manifest>

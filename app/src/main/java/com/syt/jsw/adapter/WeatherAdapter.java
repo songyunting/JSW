@@ -14,7 +14,8 @@ import com.syt.jsw.pojo.WeatherDto;
 import java.util.List;
 
 /**
- * 天气预报适配器
+ * 天气预报 适配器
+ *
  * @author syt
  * created in 2021/5/7 10:05
  */

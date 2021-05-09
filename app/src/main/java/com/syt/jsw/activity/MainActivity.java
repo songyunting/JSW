@@ -13,6 +13,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
+ * 就是玩
+ *
  * @author syt
  * created in 2021/5/6 10:18
  */
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         rlRecycleView.setLayoutManager(mLayoutManager);
-        String[] dataSource = {"天气预报", "Chrome", "Apple", "FireFox", "Safari", "Microsoft", "Linux", "Windows", "MacOs", "Others", "FlipBoard"};
+        String[] dataSource = {"天气预报", "新闻头条", "Apple", "FireFox", "Safari", "Microsoft", "Linux", "Windows", "MacOs", "Others", "FlipBoard"};
         mAdapter = new MyRecyclerViewAdapter();
         mAdapter.setDataSource(this, dataSource);
         rlRecycleView.setAdapter(mAdapter);

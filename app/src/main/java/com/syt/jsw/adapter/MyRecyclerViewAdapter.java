@@ -11,10 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.syt.jsw.R;
+import com.syt.jsw.activity.NewTopActivity;
 import com.syt.jsw.activity.WeatherActivity;
 import com.syt.jsw.utils.IntentUtils;
 
 /**
+ * 首页 适配器
+ *
  * @author syt
  * created in 2021/5/5 16:50
  */
@@ -41,6 +44,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             switch (mDataSource[position]) {
                 case "天气预报":
                     IntentUtils.startActivity(mContext, WeatherActivity.class);
+                    break;
+                case "新闻头条":
+                    IntentUtils.startActivity(mContext, NewTopActivity.class);
                     break;
             }
         });

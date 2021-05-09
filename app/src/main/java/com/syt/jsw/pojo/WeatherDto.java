@@ -3,6 +3,8 @@ package com.syt.jsw.pojo;
 import lombok.Data;
 
 /**
+ * 天气详情 实体类
+ *
  * @author syt
  * created in 2021/5/6 11:17
  */
