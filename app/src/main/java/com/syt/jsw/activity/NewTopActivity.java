@@ -49,7 +49,6 @@ public class NewTopActivity extends AppCompatActivity implements OnRequestResult
     @BindView(R.id.avi_loading)
     AVLoadingIndicatorView aviLoading;
 
-    private NewTopAdapter newTopAdapter;
     private NewAdapter newAdapter;
     private List<NewDto> newDtoList = new ArrayList<>();
 
@@ -75,6 +74,9 @@ public class NewTopActivity extends AppCompatActivity implements OnRequestResult
     }
 
     private void initView() {
+        newTopView = findViewById(R.id.rl_new_top_view);
+        recommendView = findViewById(R.id.rl_recommend_view);
+        aviLoading = findViewById(R.id.avi_loading);
         GridLayoutManager mLayoutManager = new GridLayoutManager(this, 3);
         mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -84,7 +86,7 @@ public class NewTopActivity extends AppCompatActivity implements OnRequestResult
         });
         newTopView.setLayoutManager(mLayoutManager);
         String[] dataSource = {"推荐", "国内", "国际", "娱乐", "体育", "军事", "科技", "财经", "时尚", "游戏", "汽车", "健康"};
-        newTopAdapter = new NewTopAdapter();
+        NewTopAdapter newTopAdapter = new NewTopAdapter();
         newTopAdapter.setDataSource(this, dataSource);
         newTopView.setAdapter(newTopAdapter);
     }
@@ -102,12 +104,11 @@ public class NewTopActivity extends AppCompatActivity implements OnRequestResult
     @Override
     public void onSuccess(int code, String json) {
         if (!StringUtils.isEmpty(json)) {
-            newDtoList.clear();
             String data = JsonUtils.getValue(json, "result");
             JSONObject jsonObject = JSONObject.parseObject(data);
             String data2 = jsonObject.getString("data");
             newDtoList = JsonUtils.getList(data2, NewDto.class);
-            if (newDtoList != null) {
+            if (newDtoList.size() > 0) {
                 newAdapter.addData(newDtoList);
             }
         }

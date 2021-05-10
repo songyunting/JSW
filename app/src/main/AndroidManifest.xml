@@ -18,9 +18,9 @@
         android:roundIcon="@mipmap/ic_jsw_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".web.NewDetailsWeb"></activity>
+        <activity android:name=".web.NewDetailsWeb"/>
         <activity android:name=".activity.NewListActivity" />
-        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.NewTopActivity" />
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
@@ -29,7 +29,7 @@
         <activity
             android:name=".activity.WeatherActivity"
             android:theme="@style/DefaultCityPickerTheme" />
-        <activity android:name=".activity.NewTopActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -2,13 +2,13 @@ package com.syt.jsw.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ajguan.library.EasyRefreshLayout;
 import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -18,7 +18,7 @@ import com.syt.jsw.adapter.NewAdapter;
 import com.syt.jsw.pojo.NewDto;
 import com.syt.jsw.utils.JsonUtils;
 import com.syt.jsw.utils.OkgoUtils;
-import com.wang.avi.AVLoadingIndicatorView;
+import com.syt.jsw.utils.PageManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,12 +46,14 @@ public class NewListActivity extends AppCompatActivity implements OnRequestResul
     @BindView(R.id.rl_new_list_view)
     RecyclerView newListView;
 
-    @BindView(R.id.avi_loading)
-    AVLoadingIndicatorView aviLoading;
+    @BindView(R.id.sr_refresh)
+    EasyRefreshLayout refresh;
+
+    private PageManager pageManager;
 
     private NewAdapter newAdapter;
 
-    private List<NewDto> dtoList = new ArrayList<>();
+    private List<NewDto> newDto = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,13 +74,35 @@ public class NewListActivity extends AppCompatActivity implements OnRequestResul
         String type = intent.getStringExtra("type");
         String title = intent.getStringExtra("title");
         tvTitle.setText(title);
+        pageManager = new PageManager() {
+            @Override
+            public void load(int param1, int param2) {
+                Map<String, String> param = new HashMap<>();
+                param.put("type", type);
+                param.put("key", J_API_KEY);
+                param.put("page", String.valueOf(param1));
+                param.put("page_size", String.valueOf(param2));
+                OkgoUtils.getInstance().get(NEW_TOP, param, 0, NewListActivity.this);
+            }
+        };
+
         newListView.setLayoutManager(new LinearLayoutManager(this));
-        newAdapter = new NewAdapter(R.layout.new_view_item, dtoList);
+        newAdapter = new NewAdapter(R.layout.new_view_item, newDto);
         newListView.setAdapter(newAdapter);
-        Map<String, String> param = new HashMap<>();
-        param.put("type", type);
-        param.put("key", J_API_KEY);
-        OkgoUtils.getInstance().get(NEW_TOP, param, 0, NewListActivity.this);
+
+        //刷新功能
+        refresh.addEasyEvent(new EasyRefreshLayout.EasyEvent() {
+            @Override
+            public void onLoadMore() {
+                pageManager.loadPage(false);
+            }
+
+            @Override
+            public void onRefreshing() {
+                pageManager.loadPage(true);
+            }
+        });
+        pageManager.loadPage(true);
     }
 
     @OnClick(R.id.left_back)
@@ -88,30 +112,40 @@ public class NewListActivity extends AppCompatActivity implements OnRequestResul
 
     @Override
     public void onRequestStart(int reqCode) {
-        aviLoading.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onSuccess(int code, String json) {
         if (!StringUtils.isEmpty(json)) {
-            dtoList.clear();
             String data = JsonUtils.getValue(json, "result");
             JSONObject jsonObject = JSONObject.parseObject(data);
             String data2 = jsonObject.getString("data");
-            dtoList = JsonUtils.getList(data2, NewDto.class);
-            if (dtoList != null) {
+            List<NewDto> dtoList = JsonUtils.getList(data2, NewDto.class);
+            if (dtoList.size() > 0) {
+                if (pageManager.isFirstPage()) {
+                    newDto.clear();
+                }
                 newAdapter.addData(dtoList);
+            } else {
+                refresh.loadNothing();
             }
+            pageManager.finishLoad(true);
+            refresh.closeLoadView();
         }
     }
 
     @Override
     public void onFailed(int code, String msg) {
         ToastUtils.showShort(msg);
+        refresh.closeLoadView();
+        refresh.refreshComplete();
+        pageManager.finishLoad(false);
     }
 
     @Override
     public void onRequestFinish(int reqCode) {
-        aviLoading.setVisibility(View.GONE);
+        refresh.closeLoadView();
+        refresh.refreshComplete();
+        pageManager.finishLoad(false);
     }
 }
